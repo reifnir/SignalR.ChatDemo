@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>SignalR Simple Chat Demo</title>
+    <script src="Scripts/jquery-1.6.4.js"></script>
+    <script src="Scripts/jquery.signalR-1.0.0.js"></script>
+    <!-- make sure to check this link out, it's dynamically generated JavaScript from your hubs -->
+    <script src="signalr/hubs"></script>
+    <script>
+        var chat;
+
+        $(function () {
+            // Created proxy
+            chat = $.connection.simpleChat;
+
+            // Assign a function that can be called by the server (note: do this before starting the hub!!)
+            chat.client.addMessage = receiveMessageFromServer;
+
+            // Register a function with the button click
+            $("#broadcast").click(sendMessageToServer);
+
+            // Start the connection
+            $.connection.hub.start()
+                .fail(function () {
+                    alert('onoz, I can\'t connect!!');
+                });
+        });
+
+        function receiveMessageFromServer(message, name, color) {
+            // Add the message to the list
+            $('#messages').append('<li>' + name + ' says: ' + '<span style="color: ' + color + '">' + message + '</style></li>');
+        }
+
+        function sendMessageToServer() {
+            // Call the chat method on the server
+            var message = {
+                message: $('#message').val(),
+                name: $('#name').val(),
+                color: $('#color').val()
+            };
+            //debugger;
+            chat.server.spamEveryone(message);
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <input type="text" id="name" value="[Your name here]" />
+        <select id="color">
+            <option>Red</option>
+            <option>Black</option>
+            <option>Green</option>
+            <option>Orange</option>
+        </select>
+        <input type="text" id="message" />
+        <button id="broadcast">Send</button>
+        <ul id="messages"></ul>
+    </div>
+</body>
+</html>
