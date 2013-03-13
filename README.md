@@ -22,10 +22,8 @@ How To Use It
 
 ![Chrome](/Images/Chrome.png)
 
-Firefox
 ![Firefox](/Images/Firefox.png)
 
-IE
 ![IE](/Images/IE.png)
 
 
